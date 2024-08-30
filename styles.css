@@ -1,0 +1,156 @@
+/* General body styling */
+body {
+    font-family: 'Calibri', sans-serif;
+    background-color: #f4f4f4c5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Login container to hold both the image and the form */
+.login-container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* Image container styling */
+.image-container {
+    flex: 1;
+    background-color: #007bff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Login form container styling */
+.login-form-container {
+    flex: 1;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Paragraph styling */
+p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Label styling */
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
+}
+
+/* Input field styling */
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+/* Remember me checkbox */
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 5px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Submit button styling */
+input[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for the user input select dropdown */
+select {
+    appearance: none;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Alternative login link styling */
+.alternative-login {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.alternative-login a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.alternative-login a:hover {
+    text-decoration: underline;
+}
+.hidden {
+    display: none;
+}
+.container{
+    text-align: center;
+}
