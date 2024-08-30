@@ -17,7 +17,7 @@
             overflow: hidden;
         }
         header {
-            background: #333;
+            background: #075cdd;
             color: #fff;
             padding: 1rem 0;
             text-align: center;
@@ -62,7 +62,7 @@
         }
         .form-group button {
             padding: 0.75rem;
-            background: #333;
+            background: #3c71e4;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -128,7 +128,17 @@
                         <label for="dob">Date of Birth</label>
                         <input type="date" id="dob" required>
                         <label for="bloodGroup">Blood Group</label>
-                        <input type="text" id="bloodGroup" required>
+                        <select id="bloodGroup" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
                         <label for="insuranceId">Insurance ID</label>
                         <input type="text" id="insuranceId" required>
                         <label for="pcpName">Primary Care Physician Name</label>
@@ -205,20 +215,27 @@
         </div>
     </div>
     <script>
-        document.getElementById('addUserBtn').addEventListener('click', function() {
-            document.getElementById('addUserSection').style.display = 'block';
-            document.getElementById('deleteUserSection').style.display = 'none';
-        });
+        // Load form data from local storage
+        function loadFormData() {
+            const formData = JSON.parse(localStorage.getItem('userFormData'));
+            if (formData) {
+                for (const key in formData) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.tagName === 'TEXTAREA') {
+                            element.value = formData[key];
+                        } else if (element.tagName === 'SELECT') {
+                            element.value = formData[key];
+                        } else {
+                            element.value = formData[key];
+                        }
+                    }
+                }
+            }
+        }
 
-        document.getElementById('deleteUserBtn').addEventListener('click', function() {
-            document.getElementById('addUserSection').style.display = 'none';
-            document.getElementById('deleteUserSection').style.display = 'block';
-        });
-
-        document.getElementById('addUserForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            // Collect form data
+        // Save form data to local storage
+        function saveFormData() {
             const formData = {
                 name: document.getElementById('name').value,
                 emergencyContact: document.getElementById('emergencyContact').value,
@@ -231,43 +248,63 @@
                 pcpNumber: document.getElementById('pcpNumber').value,
                 maritalStatus: document.getElementById('maritalStatus').value,
                 medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
-                policyName: document.getElementById('policyName').value || 'N/A',
-                employer: document.getElementById('employer').value || 'N/A',
-                employerAddress: document.getElementById('employerAddress').value || 'N/A',
-                policyId: document.getElementById('policyId').value || 'N/A',
-                chronicConditions: document.getElementById('chronicConditions').value || 'N/A',
-                chronicMedications: document.getElementById('chronicMedications').value || 'N/A',
-                surgicalHistory: document.getElementById('surgicalHistory').value || 'N/A',
-                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value || 'N/A',
-                familyHistory: document.getElementById('familyHistory').value || 'N/A',
-                socialHistory: document.getElementById('socialHistory').value || 'N/A',
-                vaccineHistory: document.getElementById('vaccineHistory').value || 'N/A',
-                foodAllergies: document.getElementById('foodAllergies').value || 'N/A',
-                materialAllergies: document.getElementById('materialAllergies').value || 'N/A',
-                medicationAllergies: document.getElementById('medicationAllergies').value || 'N/A',
-                doctorNote: document.getElementById('doctorNote').value || 'N/A'
+                policyName: document.getElementById('policyName').value,
+                employer: document.getElementById('employer').value,
+                employerAddress: document.getElementById('employerAddress').value,
+                policyId: document.getElementById('policyId').value,
+                chronicConditions: document.getElementById('chronicConditions').value,
+                chronicMedications: document.getElementById('chronicMedications').value,
+                surgicalHistory: document.getElementById('surgicalHistory').value,
+                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
+                familyHistory: document.getElementById('familyHistory').value,
+                socialHistory: document.getElementById('socialHistory').value,
+                vaccineHistory: document.getElementById('vaccineHistory').value,
+                foodAllergies: document.getElementById('foodAllergies').value,
+                materialAllergies: document.getElementById('materialAllergies').value,
+                medicationAllergies: document.getElementById('medicationAllergies').value,
+                doctorNote: document.getElementById('doctorNote').value
             };
+            localStorage.setItem('userFormData', JSON.stringify(formData));
+        }
 
-            // Generate a link with patient information (for demonstration purposes)
-            const patientInfo = encodeURIComponent(JSON.stringify(formData));
-            const exportLink = patient-info.html?data=${patientInfo};
+        // Event listeners for showing/hiding sections
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'block';
+            document.getElementById('deleteUserSection').style.display = 'none';
+        });
+
+        document.getElementById('deleteUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'none';
+            document.getElementById('deleteUserSection').style.display = 'block';
+        });
+
+        // Handle form submission
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
             
-            // Create and open the link
-            window.open(exportLink, '_blank');
-            
-            alert('Patient added successfully');
+            // Save form data to local storage
+            saveFormData();
+
+            // Process form data (e.g., save to a database, export as CSV)
+            const formData = JSON.parse(localStorage.getItem('userFormData'));
+            console.log('Form Data:', formData);
+
+            // Reset form after submission
             document.getElementById('addUserForm').reset();
+            localStorage.removeItem('userFormData'); // Clear saved data after submission
         });
 
-        // Handle delete user button clicks
-        document.getElementById('userList').addEventListener('click', function(event) {
-            if (event.target.tagName === 'BUTTON') {
-                const userItem = event.target.parentElement;
-                // Handle deleting user (e.g., send request to server)
-                userItem.remove();
-                alert('User deleted successfully');
-            }
+        // Example delete user functionality
+        document.querySelectorAll('.user-list button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const userId = this.parentElement.textContent.match(/ID: (\d+)/)[1];
+                console.log(`Deleting user with ID: ${userId}`);
+                this.parentElement.remove(); // Simulate deletion
+            });
         });
+
+        // Load form data on page load
+        window.addEventListener('load', loadFormData);
     </script>
 </body>
 </html>
