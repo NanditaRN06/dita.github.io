@@ -3,98 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login to Em-Tags</title>
-    <link href="styles.css" rel="stylesheet">
+    <title>Sign Up - Em-Tags</title>
+    <link href="signstyle.css" rel="stylesheet">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-form-container">
-            <!--<div class="logo">
-                <img src="your-logo-path.png" alt="Logo">
-            </div>-->
-            <h2>Login</h2>
-            <p>Enter your credentials to access your account.</p>
-            <form id="login-form">
-                <div class="user-input">
-                    <label for="usertype">I am a:</label>
-                    <select id="usertype" name="usertype" required>
-                        <option value="" disabled selected>Select your role</option>
-                        <option value="Medical Personal">Medical Personal</option>
-                        <option value="Client">Client</option>
-                        <option value="Emergency Contact">Emergency Contact</option>
-                    </select>
-                </div>
-                <div id="medical-code" class="hidden">
-                    <label for="hospital-code">Hospital Code:</label>
-                    <input type="text" id="hospital-code" name="hospital-code">
-                </div>
-                <label for="username">Username/Email:</label>
-                <input type="text" id="username" name="username" placeholder="Enter your email address/ username" required>
-                
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    <div class="sign-up-container">
+        <div class="sign-up-form-container">
+            <h2>Sign Up</h2>
+            <p>Create an account to get started.</p>
+            <form id="sign-up-form">
+                <label for="full-name">Full Name:</label>
+                <input type="text" id="full-name" name="full-name" placeholder="Enter your full name" required>
 
-                <div class="remember-me">
-                    <input type="checkbox" id="remember-me" name="remember-me">
-                    <label for="remember-me">Remember me</label>
-                </div>                
-                <input type="submit" value="Login">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Choose a username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+
+                <input type="submit" value="Sign Up">
             </form>
-            <div class = ".container"> 
-                <a href="passforgot.html" class="forgot-password">Forgot your password?</a>
+            <div class="back-to-login">
+                Already have an account? <a href="login.html">Login</a>
             </div>
-            <div class="alternative-login">
-                <p>Don't have an account? <a href="signin.html">Sign up</a></p>
-            </div>
-        </div>
-        <div class="image-container">
-            <img src="med.png" alt="Login Image">
         </div>
     </div>
-
-    <script>
-        function validateLogin(username, password) {
-            return username === "testuser" && password === "password123";
-        }
-
-        function validateHospitalCode(code) {
-            return code === "HOSP123";
-        }
-
-        function toggleHospitalCodeVisibility() 
-        
-        {
-            const userType = document.getElementById('usertype').value;
-            const hospitalCodeContainer = document.getElementById('medical-code');
-            if (userType === 'Medical Personal') {
-                hospitalCodeContainer.classList.remove('hidden');
-            } else {
-                hospitalCodeContainer.classList.add('hidden');
-            }
-        }
-
-        function handleFormSubmission(e) 
-        {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const userType = document.getElementById('usertype').value;
-            const hospitalCode = document.getElementById('hospital-code').value;
-
-            if (userType === 'Medical Personal' && !validateHospitalCode(hospitalCode)) {
-                alert("Invalid hospital code. Please try again.");
-                return;
-            }
-
-            if (validateLogin(username, password)) {
-                alert("Login successful!");
-            } else {
-                alert("Invalid credentials. Please try again.");
-            }
-        }
-
-        document.getElementById('usertype').addEventListener('change', toggleHospitalCodeVisibility);
-        document.getElementById('login-form').addEventListener('submit', handleFormSubmission);
-    </script>
 </body>
 </html>
