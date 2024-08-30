@@ -64,6 +64,9 @@
             const clientInfo = document.getElementById('client-info');
             const medicalInfo = document.getElementById('medical-info');
             
+            // Debugging output
+            console.log('Selected Role:', role);
+            
             if (role === 'Emergency Contact') {
                 clientInfo.classList.remove('hidden');
                 medicalInfo.classList.add('hidden');
@@ -82,6 +85,7 @@
             alert("Sign-up successful! Please log in.");
         }
 
+        // Ensure these are set up correctly
         document.getElementById('role').addEventListener('change', toggleRoleSpecificFields);
         document.getElementById('sign-up-form').addEventListener('submit', handleSignUp);
     </script>
