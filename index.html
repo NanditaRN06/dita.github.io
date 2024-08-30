@@ -40,7 +40,7 @@
                 </div>                
                 <input type="submit" value="Login">
             </form>
-            <div class = ".container"> 
+            <div class="container"> 
                 <a href="passforgot.html" class="forgot-password">Forgot your password?</a>
             </div>
             <div class="alternative-login">
@@ -53,17 +53,22 @@
     </div>
 
     <script>
+        // List of valid users (this is just an example, typically this would come from a server)
+        const validUsers = [
+            { username: 'testuser', password: 'password123' },
+            { username: 'anotheruser', password: 'anotherpassword' }
+        ];
+
         function validateLogin(username, password) {
-            return username === "testuser" && password === "password123";
+            // Check if the username and password match any user in the validUsers list
+            return validUsers.some(user => user.username === username && user.password === password);
         }
 
         function validateHospitalCode(code) {
             return code === "HOSP123";
         }
 
-        function toggleHospitalCodeVisibility() 
-        
-        {
+        function toggleHospitalCodeVisibility() {
             const userType = document.getElementById('usertype').value;
             const hospitalCodeContainer = document.getElementById('medical-code');
             if (userType === 'Medical Personal') {
@@ -73,13 +78,14 @@
             }
         }
 
-        function handleFormSubmission(e) 
-        {
+        function handleFormSubmission(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const userType = document.getElementById('usertype').value;
             const hospitalCode = document.getElementById('hospital-code').value;
+
+            console.log(`Form submitted with username: ${username}, password: ${password}, userType: ${userType}, hospitalCode: ${hospitalCode}`);
 
             if (userType === 'Medical Personal' && !validateHospitalCode(hospitalCode)) {
                 alert("Invalid hospital code. Please try again.");
