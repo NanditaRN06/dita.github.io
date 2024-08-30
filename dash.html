@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        nav {
+            background: #444;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+        }
+        .main-content {
+            padding: 2rem;
+        }
+        .login-section, .about-section, .countdown-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+        }
+        .login-section h2, .about-section h2, .countdown-section h2 {
+            margin-top: 0;
+        }
+        .login-form input {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: calc(100% - 2rem);
+        }
+        .login-form button {
+            padding: 0.75rem;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .login-form button:hover {
+            background: #555;
+        }
+        .manage-users-button {
+            display: none;
+            padding: 0.75rem;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .manage-users-button:hover {
+            background: #0056b3;
+        }
+        .countdown {
+            font-size: 2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <nav>
+        <a href="#login">Login</a>
+        <a href="#about">About Us</a>
+        <a href="#countdown">User Countdown</a>
+    </nav>
+    <div class="container">
+        <section id="login" class="login-section">
+            <h2>Admin Login</h2>
+            <form class="login-form" id="loginForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <button class="manage-users-button" id="manageUsersBtn">Manage Users</button>
+        </section>
+        <section id="about" class="about-section">
+            <h2>About Us</h2>
+            <p>We are a leading company in the tech industry, providing top-notch solutions to our clients worldwide.</p>
+        </section>
+        <section id="countdown" class="countdown-section">
+            <h2>Number of Users</h2>
+            <div class="countdown" id="countdown">0</div>
+        </section>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Simulate successful login
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === 'password') { // Basic check, should be more secure
+                document.querySelector('.manage-users-button').style.display = 'block';
+                document.getElementById('manageUsersBtn').addEventListener('click', function() {
+                    window.location.href = 'manage-users.html'; // Replace with actual URL
+                });
+            } else {
+                alert('Invalid login credentials');
+            }
+        });
+
+        // Example countdown script
+        let userCount = 0;
+        const countdownElement = document.getElementById('countdown');
+
+        function updateCountdown() {
+            countdownElement.textContent = userCount++;
+        }
+
+        // Update countdown every 2 seconds for demonstration
+        setInterval(updateCountdown, 2000);
+    </script>
+</body>
+</html>
