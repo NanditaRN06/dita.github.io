@@ -73,8 +73,8 @@
             } else if (role === 'Medical Personal') {
                 medicalInfo.classList.remove('hidden');
                 clientInfo.classList.add('hidden');
-            } else {
-                medicalInfo.classList.remove('hidden');
+            } else if (role === 'Client') {
+                medicalInfo.classList.('hidden');
                 clientInfo.classList.remove('hidden');
             }
         }
