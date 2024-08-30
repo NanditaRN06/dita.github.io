@@ -53,15 +53,26 @@
     </div>
 
     <script>
-        // List of valid users (this is just an example, typically this would come from a server)
-        const validUsers = [
-            { username: 'testuser', password: 'password123' },
-            { username: 'anotheruser', password: 'anotherpassword' }
-        ];
+        // Mock valid users for each role
+        const users = {
+            "Medical Personal": [
+                { username: 'meduser1', password: 'medpass1' },
+                { username: 'meduser2', password: 'medpass2' }
+            ],
+            "Client": [
+                { username: 'clientuser1', password: 'clientpass1' },
+                { username: 'clientuser2', password: 'clientpass2' }
+            ],
+            "Emergency Contact": [
+                { username: 'emergencyuser1', password: 'emergencypass1' },
+                { username: 'emergencyuser2', password: 'emergencypass2' }
+            ]
+        };
 
-        function validateLogin(username, password) {
-            // Check if the username and password match any user in the validUsers list
-            return validUsers.some(user => user.username === username && user.password === password);
+        function validateLogin(username, password, userType) {
+            // Check if the username and password match any user in the specific role list
+            const roleUsers = users[userType] || [];
+            return roleUsers.some(user => user.username === username && user.password === password);
         }
 
         function validateHospitalCode(code) {
@@ -85,17 +96,18 @@
             const userType = document.getElementById('usertype').value;
             const hospitalCode = document.getElementById('hospital-code').value;
 
-            console.log(`Form submitted with username: ${username}, password: ${password}, userType: ${userType}, hospitalCode: ${hospitalCode}`);
-
             if (userType === 'Medical Personal' && !validateHospitalCode(hospitalCode)) {
                 alert("Invalid hospital code. Please try again.");
                 return;
             }
 
-            if (validateLogin(username, password)) {
+            if (validateLogin(username, password, userType)) {
                 alert("Login successful!");
+                // Redirect or perform further actions after successful login
+                // Example: window.location.href = "dashboard.html";
             } else {
-                alert("Invalid credentials. Please try again.");
+                alert("Invalid credentials. Redirecting to sign-up page...");
+                window.location.href = "signin.html"; // Redirect to sign-in page
             }
         }
 
