@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Em-Tags</title>
     <link href="signstyle.css" rel="stylesheet">
+    <style>
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
     <div class="sign-up-container">
@@ -61,8 +64,7 @@
             const clientInfo = document.getElementById('client-info');
             const medicalInfo = document.getElementById('medical-info');
             
-            if (role === 'Emergency Contact') 
-            {
+            if (role === 'Emergency Contact') {
                 clientInfo.classList.remove('hidden');
                 medicalInfo.classList.add('hidden');
             } else if (role === 'Medical Personal') {
