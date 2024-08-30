@@ -1,3 +1,4 @@
+index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +41,7 @@
                 </div>                
                 <input type="submit" value="Login">
             </form>
-            <div class="container"> 
+            <div class = ".container"> 
                 <a href="passforgot.html" class="forgot-password">Forgot your password?</a>
             </div>
             <div class="alternative-login">
@@ -53,35 +54,17 @@
     </div>
 
     <script>
-        // Mock user data for demonstration purposes
-        const users = {
-            "Medical Personal": [
-                { username: "meduser1", password: "medpass1", hospitalCode: "HOSP123" }
-            ],
-            "Client": [
-                { username: "clientuser1", password: "clientpass1" }
-            ],
-            "Emergency Contact": [
-                { username: "emergencyuser1", password: "emergencypass1" }
-            ]
-        };
-
-        function validateLogin(username, password, userType, hospitalCode) {
-            if (userType === "Medical Personal") {
-                return users["Medical Personal"].some(user => 
-                    user.username === username && 
-                    user.password === password && 
-                    user.hospitalCode === hospitalCode
-                );
-            } else {
-                return users[userType].some(user => 
-                    user.username === username && 
-                    user.password === password
-                );
-            }
+        function validateLogin(username, password) {
+            return username === "testuser" && password === "password123";
         }
 
-        function toggleHospitalCodeVisibility() {
+        function validateHospitalCode(code) {
+            return code === "HOSP123";
+        }
+
+        function toggleHospitalCodeVisibility() 
+        
+        {
             const userType = document.getElementById('usertype').value;
             const hospitalCodeContainer = document.getElementById('medical-code');
             if (userType === 'Medical Personal') {
@@ -91,20 +74,24 @@
             }
         }
 
-        function handleFormSubmission(e) {
+        function handleFormSubmission(e) 
+        {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const userType = document.getElementById('usertype').value;
             const hospitalCode = document.getElementById('hospital-code').value;
 
-            if (!validateLogin(username, password, userType, hospitalCode)) {
-                alert("Invalid credentials or details. Please try again.");
+            if (userType === 'Medical Personal' && !validateHospitalCode(hospitalCode)) {
+                alert("Invalid hospital code. Please try again.");
                 return;
             }
 
-            alert("Login successful!");
-            // Redirect or take appropriate action after successful login
+            if (validateLogin(username, password)) {
+                alert("Login successful!");
+            } else {
+                alert("Invalid credentials. Please try again.");
+            }
         }
 
         document.getElementById('usertype').addEventListener('change', toggleHospitalCodeVisibility);
