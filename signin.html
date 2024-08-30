@@ -12,6 +12,26 @@
             <h2>Sign Up</h2>
             <p>Create an account to get started.</p>
             <form id="sign-up-form">
+                <div class="user-input">
+                    <label for="role">I am a:</label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="Medical Personal">Medical Personal</option>
+                        <option value="Client">Client</option>
+                        <option value="Emergency Contact">Emergency Contact</option>
+                    </select>
+                </div>
+                
+                <div id="client-info" class="hidden">
+                    <label for="client-name">Client Name:</label>
+                    <input type="text" id="client-name" name="client-name" placeholder="Enter client's full name">
+                </div>
+
+                <div id="medical-info" class="hidden">
+                    <label for="hospital-code">Hospital Code:</label>
+                    <input type="text" id="hospital-code" name="hospital-code" placeholder="Enter your hospital code">
+                </div>
+
                 <label for="full-name">Full Name:</label>
                 <input type="text" id="full-name" name="full-name" placeholder="Enter your full name" required>
 
@@ -34,5 +54,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleRoleSpecificFields() {
+            const role = document.getElementById('role').value;
+            const clientInfo = document.getElementById('client-info');
+            const medicalInfo = document.getElementById('medical-info');
+            
+            if (role === 'Emergency Contact') {
+                clientInfo.classList.remove('hidden');
+                medicalInfo.classList.add('hidden');
+            } else if (role === 'Medical Personal') {
+                medicalInfo.classList.remove('hidden');
+                clientInfo.classList.add('hidden');
+            } else {
+                medicalInfo.classList.add('hidden');
+                clientInfo.classList.add('hidden');
+            }
+        }
+
+        function handleSignUp(e) {
+            e.preventDefault();
+            // Normally you would handle form submission here, e.g., send data to server
+            alert("Sign-up successful! Please log in.");
+        }
+
+        document.getElementById('role').addEventListener('change', toggleRoleSpecificFields);
+        document.getElementById('sign-up-form').addEventListener('submit', handleSignUp);
+    </script>
 </body>
 </html>
