@@ -221,15 +221,7 @@
             if (formData) {
                 for (const key in formData) {
                     const element = document.getElementById(key);
-                    if (element) {
-                        if (element.tagName === 'TEXTAREA') {
-                            element.value = formData[key];
-                        } else if (element.tagName === 'SELECT') {
-                            element.value = formData[key];
-                        } else {
-                            element.value = formData[key];
-                        }
-                    }
+                    if (element) element.value = formData[key];
                 }
             }
         }
@@ -267,10 +259,11 @@
             localStorage.setItem('userFormData', JSON.stringify(formData));
         }
 
-        // Event listeners for showing/hiding sections
+        // Show and hide sections
         document.getElementById('addUserBtn').addEventListener('click', function() {
             document.getElementById('addUserSection').style.display = 'block';
             document.getElementById('deleteUserSection').style.display = 'none';
+            loadFormData(); // Load data if available
         });
 
         document.getElementById('deleteUserBtn').addEventListener('click', function() {
@@ -279,32 +272,83 @@
         });
 
         // Handle form submission
-        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+        document.getElementById('addUserForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-            
-            // Save form data to local storage
             saveFormData();
 
-            // Process form data (e.g., save to a database, export as CSV)
-            const formData = JSON.parse(localStorage.getItem('userFormData'));
-            console.log('Form Data:', formData);
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                emergencyContact: document.getElementById('emergencyContact').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                dob: document.getElementById('dob').value,
+                bloodGroup: document.getElementById('bloodGroup').value,
+                insuranceId: document.getElementById('insuranceId').value,
+                pcpName: document.getElementById('pcpName').value,
+                pcpNumber: document.getElementById('pcpNumber').value,
+                maritalStatus: document.getElementById('maritalStatus').value,
+                medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
+                policyName: document.getElementById('policyName').value,
+                employer: document.getElementById('employer').value,
+                employerAddress: document.getElementById('employerAddress').value,
+                policyId: document.getElementById('policyId').value,
+                chronicConditions: document.getElementById('chronicConditions').value,
+                chronicMedications: document.getElementById('chronicMedications').value,
+                surgicalHistory: document.getElementById('surgicalHistory').value,
+                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
+                familyHistory: document.getElementById('familyHistory').value,
+                socialHistory: document.getElementById('socialHistory').value,
+                vaccineHistory: document.getElementById('vaccineHistory').value,
+                foodAllergies: document.getElementById('foodAllergies').value,
+                materialAllergies: document.getElementById('materialAllergies').value,
+                medicationAllergies: document.getElementById('medicationAllergies').value,
+                doctorNote: document.getElementById('doctorNote').value
+            };
 
-            // Reset form after submission
-            document.getElementById('addUserForm').reset();
-            localStorage.removeItem('userFormData'); // Clear saved data after submission
+            // Send data to server
+            try {
+                const response = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+
+                console.log('Form Data saved successfully');
+                document.getElementById('addUserForm').reset();
+                localStorage.removeItem('userFormData');
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
 
-        // Example delete user functionality
+        // Handle user deletion
         document.querySelectorAll('.user-list button').forEach(function(button) {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', async function() {
                 const userId = this.parentElement.textContent.match(/ID: (\d+)/)[1];
                 console.log(`Deleting user with ID: ${userId}`);
-                this.parentElement.remove(); // Simulate deletion
+                
+                try {
+                    const response = await fetch(`/api/users/${userId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+
+                    this.parentElement.remove(); // Remove the user from the list
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             });
         });
-
-        // Load form data on page load
-        window.addEventListener('load', loadFormData);
     </script>
 </body>
 </html>
