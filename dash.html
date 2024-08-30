@@ -36,14 +36,14 @@
         .main-content {
             padding: 2rem;
         }
-        .login-section, .about-section, .countdown-section {
+        .login-section, .about-section, .countdown-section, .manage-users-section {
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px #007bff;
             margin-bottom: 2rem;
             padding: 2rem;
         }
-        .login-section h2, .about-section h2, .countdown-section h2 {
+        .login-section h2, .about-section h2, .countdown-section h2, .manage-users-section h2 {
             margin-top: 0;
         }
         .login-form input {
@@ -101,27 +101,37 @@
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit">Login</button>
             </form>
-            <button class="manage-users-button" id="manageUsersBtn">Manage Users</button>
         </section>
+        
         <section id="about" class="about-section">
             <h2>About Us</h2>
             <p>We are a leading company in the tech industry, providing top-notch solutions to our clients worldwide.</p>
         </section>
+        
         <section id="countdown" class="countdown-section">
             <h2>Number of Users</h2>
             <div class="countdown" id="countdown">0</div>
+        </section>
+
+        <!-- Manage Users Section -->
+        <section id="manageUsers" class="manage-users-section" style="display: none;">
+            <h2>Manage Users</h2>
+            <button class="manage-users-button" id="manageUsersBtn">Manage Users</button>
         </section>
     </div>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            // Simulate successful login
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (username === 'admin' && password === 'password') { // Basic check, should be more secure
-                document.querySelector('.manage-users-button').style.display = 'block';
+                // Hide the login section and show the manage users section
+                document.querySelector('.login-section').style.display = 'none';
+                document.getElementById('manageUsers').style.display = 'block';
+                
+                // Add event listener for the Manage Users button
                 document.getElementById('manageUsersBtn').addEventListener('click', function() {
                     window.location.href = 'manage-users.html'; // Replace with actual URL
                 });
