@@ -213,117 +213,65 @@
         </div>
     </div>
     <script>
-        // Load all users from local storage
-        function loadUsers() {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            const userList = document.getElementById('userList');
-            userList.innerHTML = '';
-
-            users.forEach((user, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    ${user.name} - ${user.age}
-                    <button onclick="deleteUser(${index})">Delete</button>
-                `;
-                userList.appendChild(li);
-            });
-        }
-
-        // Add user
-        document.getElementById('addUserBtn').addEventListener('click', function() {
+        // Show the Add User section
+        document.getElementById('addUserBtn').addEventListener('click', () => {
             document.getElementById('addUserSection').style.display = 'block';
             document.getElementById('deleteUserSection').style.display = 'none';
         });
 
-        // Delete user
-        document.getElementById('deleteUserBtn').addEventListener('click', function() {
-            document.getElementById('addUserSection').style.display = 'none';
+        // Show the Delete User section
+        document.getElementById('deleteUserBtn').addEventListener('click', () => {
             document.getElementById('deleteUserSection').style.display = 'block';
-            loadUsers();
+            document.getElementById('addUserSection').style.display = 'none';
         });
 
         // Handle form submission
         document.getElementById('addUserForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const emergencyContact = document.getElementById('emergencyContact').value;
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
-            const dob = document.getElementById('dob').value;
-            const bloodGroup = document.getElementById('bloodGroup').value;
-            const insuranceId = document.getElementById('insuranceId').value;
-            const pcpName = document.getElementById('pcpName').value;
-            const pcpNumber = document.getElementById('pcpNumber').value;
-            const maritalStatus = document.getElementById('maritalStatus').value;
-            const medicalProxyNumber = document.getElementById('medicalProxyNumber').value;
-            const policyName = document.getElementById('policyName').value;
-            const employer = document.getElementById('employer').value;
-            const employerAddress = document.getElementById('employerAddress').value;
-            const policyId = document.getElementById('policyId').value;
-            const chronicConditions = document.getElementById('chronicConditions').value;
-            const chronicMedications = document.getElementById('chronicMedications').value;
-            const surgicalHistory = document.getElementById('surgicalHistory').value;
-            const congenitalDiseaseHistory = document.getElementById('congenitalDiseaseHistory').value;
-            const familyHistory = document.getElementById('familyHistory').value;
-            const socialHistory = document.getElementById('socialHistory').value;
-            const vaccineHistory = document.getElementById('vaccineHistory').value;
-            const foodAllergies = document.getElementById('foodAllergies').value;
-            const materialAllergies = document.getElementById('materialAllergies').value;
-            const medicationAllergies = document.getElementById('medicationAllergies').value;
-            const doctorNote = document.getElementById('doctorNote').value;
-
-            // Create user object
+            
             const userData = {
-                name,
-                emergencyContact,
-                age,
-                gender,
-                dob,
-                bloodGroup,
-                insuranceId,
-                pcpName,
-                pcpNumber,
-                maritalStatus,
-                medicalProxyNumber,
-                policyName,
-                employer,
-                employerAddress,
-                policyId,
-                chronicConditions,
-                chronicMedications,
-                surgicalHistory,
-                congenitalDiseaseHistory,
-                familyHistory,
-                socialHistory,
-                vaccineHistory,
-                foodAllergies,
-                materialAllergies,
-                medicationAllergies,
-                doctorNote
+                name: document.getElementById('name').value,
+                emergencyContact: document.getElementById('emergencyContact').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                dob: document.getElementById('dob').value,
+                bloodGroup: document.getElementById('bloodGroup').value,
+                insuranceId: document.getElementById('insuranceId').value,
+                pcpName: document.getElementById('pcpName').value,
+                pcpNumber: document.getElementById('pcpNumber').value,
+                maritalStatus: document.getElementById('maritalStatus').value,
+                medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
+                policyName: document.getElementById('policyName').value,
+                employer: document.getElementById('employer').value,
+                employerAddress: document.getElementById('employerAddress').value,
+                policyId: document.getElementById('policyId').value,
+                chronicConditions: document.getElementById('chronicConditions').value,
+                chronicMedications: document.getElementById('chronicMedications').value,
+                surgicalHistory: document.getElementById('surgicalHistory').value,
+                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
+                familyHistory: document.getElementById('familyHistory').value,
+                socialHistory: document.getElementById('socialHistory').value,
+                vaccineHistory: document.getElementById('vaccineHistory').value,
+                foodAllergies: document.getElementById('foodAllergies').value,
+                materialAllergies: document.getElementById('materialAllergies').value,
+                medicationAllergies: document.getElementById('medicationAllergies').value,
+                doctorNote: document.getElementById('doctorNote').value
             };
 
-            // Save user to local storage
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push(userData);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            // Export user data as JSON file
-            const jsonBlob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(jsonBlob);
-            window.open(url, '_blank');
-
-            // Reset form
-            document.getElementById('addUserForm').reset();
+            fetch('http://localhost:3000/save-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.text())
+            .then(text => {
+                document.body.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
+            })
+            .catch(error => console.error('Error:', error));
         });
-
-        // Delete user function
-        function deleteUser(index) {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            users.splice(index, 1);
-            localStorage.setItem('users', JSON.stringify(users));
-            loadUsers();
-        }
     </script>
 </body>
 </html>
+
