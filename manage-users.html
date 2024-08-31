@@ -259,17 +259,18 @@
             };
 
             fetch('http://localhost:3000/save-user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            })
-            .then(response => response.text())
-            .then(text => {
-                document.body.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
-            })
-            .catch(error => console.error('Error:', error));
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userData)
+})
+.then(response => response.text())
+.then(text => {
+    document.body.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
+})
+.catch(error => console.error('Error:', error));
+
         });
     </script>
 </body>
