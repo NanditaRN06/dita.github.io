@@ -208,28 +208,35 @@
                 <h2>Delete User</h2>
                 <ul class="user-list" id="userList">
                     <!-- Example User List -->
+                    <li>John Doe - ID: 1 <button class="btn">Delete</button></li>
+                    <li>Jane Smith - ID: 2 <button class="btn">Delete</button></li>
                 </ul>
             </div>
         </div>
     </div>
     <script>
-        // Show the Add User section
-        document.getElementById('addUserBtn').addEventListener('click', () => {
-            document.getElementById('addUserSection').style.display = 'block';
-            document.getElementById('deleteUserSection').style.display = 'none';
-        });
+        // Load form data from local storage
+        function loadFormData() {
+            const formData = JSON.parse(localStorage.getItem('userFormData'));
+            if (formData) {
+                for (const key in formData) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.tagName === 'TEXTAREA') {
+                            element.value = formData[key];
+                        } else if (element.tagName === 'SELECT') {
+                            element.value = formData[key];
+                        } else {
+                            element.value = formData[key];
+                        }
+                    }
+                }
+            }
+        }
 
-        // Show the Delete User section
-        document.getElementById('deleteUserBtn').addEventListener('click', () => {
-            document.getElementById('deleteUserSection').style.display = 'block';
-            document.getElementById('addUserSection').style.display = 'none';
-        });
-
-        // Handle form submission
-        document.getElementById('addUserForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const userData = {
+        // Save form data to local storage
+        function saveFormData() {
+            const formData = {
                 name: document.getElementById('name').value,
                 emergencyContact: document.getElementById('emergencyContact').value,
                 age: document.getElementById('age').value,
@@ -257,23 +264,47 @@
                 medicationAllergies: document.getElementById('medicationAllergies').value,
                 doctorNote: document.getElementById('doctorNote').value
             };
+            localStorage.setItem('userFormData', JSON.stringify(formData));
+        }
 
-            fetch('http://localhost:3000/save-user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            })
-                .then(response => response.text())
-                .then(text => {
-                    document.body.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
-                })
-                .catch(error => console.error('Error:', error));
-
-
+        // Event listeners for showing/hiding sections
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'block';
+            document.getElementById('deleteUserSection').style.display = 'none';
         });
+
+        document.getElementById('deleteUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'none';
+            document.getElementById('deleteUserSection').style.display = 'block';
+        });
+
+        // Handle form submission
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Save form data to local storage
+            saveFormData();
+
+            // Process form data (e.g., save to a database, export as CSV)
+            const formData = JSON.parse(localStorage.getItem('userFormData'));
+            console.log('Form Data:', formData);
+
+            // Reset form after submission
+            document.getElementById('addUserForm').reset();
+            localStorage.removeItem('userFormData'); // Clear saved data after submission
+        });
+
+        // Example delete user functionality
+        document.querySelectorAll('.user-list button').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const userId = this.parentElement.textContent.match(/ID: (\d+)/)[1];
+                console.log(Deleting user with ID: ${userId});
+                this.parentElement.remove(); // Simulate deletion
+            });
+        });
+
+        // Load form data on page load
+        window.addEventListener('load', loadFormData);
     </script>
 </body>
 </html>
-
