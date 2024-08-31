@@ -6,8 +6,10 @@ const app = express();
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://ditanadig:NXRUDdSNBR1Fp0Jq@cluster0.9lnca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 
-                 { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://ditanadig:NXRUDdSNBR1Fp0Jq@cluster0.9lnca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected successfully'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
 
 const userSchema = new mongoose.Schema({
     // Personal Details
@@ -57,7 +59,7 @@ app.post('/add-user', (req, res) => {
     const userData = new User(req.body);
     userData.save()
         .then(() => res.status(200).send('User data saved successfully!'))
-        .catch(err => res.status(400).send('Error saving user data: ' + err));
+        .catch(err => res.status(400).send('Error saving user data: ' + err.message));
 });
 
 app.listen(3000, () => console.log('Server running on port 3000'));
