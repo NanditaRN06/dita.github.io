@@ -6,18 +6,49 @@ const app = express();
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/patientDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://ditanadig:NXRUDdSNBR1Fp0Jq@cluster0.9lnca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 
+                 { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Define a schema and model for user data
 const userSchema = new mongoose.Schema({
-    name: String,
-    emergencyContact: String,
-    age: Number,
-    gender: String,
-    dob: Date,
-    bloodGroup: String,
-    // Add all other fields here
+    // Personal Details
+    name: { type: String, required: true },
+    emergencyContact: { type: String, required: true },
+    age: { type: Number, required: true },
+    gender: { type: String, required: true },
+    dob: { type: Date, required: true },
+    bloodGroup: { type: String, required: true },
+    insuranceId: { type: String, required: true },
+    pcpName: { type: String, required: true },
+    pcpNumber: { type: String, required: true },
+    maritalStatus: { type: String, required: true },
+    medicalProxyNumber: { type: String, required: true },
+
+    // Insurance Info (Optional)
+    policyName: { type: String },
+    employer: { type: String },
+    employerAddress: { type: String },
+    policyId: { type: String },
+
+    // Medical History (Optional)
+    chronicConditions: { type: String },
+    chronicMedications: { type: String },
+    surgicalHistory: { type: String },
+    congenitalDiseaseHistory: { type: String },
+    familyHistory: { type: String },
+    socialHistory: { type: String },
+    vaccineHistory: { type: String },
+
+    // Allergen Information (Optional)
+    foodAllergies: { type: String },
+    materialAllergies: { type: String },
+    medicationAllergies: { type: String },
+
+    // Doctor Note (Optional)
+    doctorNote: { type: String }
 });
+
+const User = mongoose.model('User', userSchema);
+
 
 const User = mongoose.model('User', userSchema);
 
