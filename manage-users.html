@@ -198,7 +198,7 @@
                         <textarea id="doctorNote" rows="4"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="submit">Save and View</button>
+                        <button type="submit">Save and Export</button>
                     </div>
                 </form>
             </div>
@@ -220,121 +220,110 @@
             userList.innerHTML = '';
 
             users.forEach((user, index) => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <span>${user.name}</span>
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${user.name} - ${user.age}
                     <button onclick="deleteUser(${index})">Delete</button>
                 `;
-                userList.appendChild(listItem);
+                userList.appendChild(li);
             });
         }
 
-        // Add user to local storage
-        document.getElementById('addUserForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const user = {
-                name: document.getElementById('name').value,
-                emergencyContact: document.getElementById('emergencyContact').value,
-                age: document.getElementById('age').value,
-                gender: document.getElementById('gender').value,
-                dob: document.getElementById('dob').value,
-                bloodGroup: document.getElementById('bloodGroup').value,
-                insuranceId: document.getElementById('insuranceId').value,
-                pcpName: document.getElementById('pcpName').value,
-                pcpNumber: document.getElementById('pcpNumber').value,
-                maritalStatus: document.getElementById('maritalStatus').value,
-                medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
-                policyName: document.getElementById('policyName').value,
-                employer: document.getElementById('employer').value,
-                employerAddress: document.getElementById('employerAddress').value,
-                policyId: document.getElementById('policyId').value,
-                chronicConditions: document.getElementById('chronicConditions').value,
-                chronicMedications: document.getElementById('chronicMedications').value,
-                surgicalHistory: document.getElementById('surgicalHistory').value,
-                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
-                familyHistory: document.getElementById('familyHistory').value,
-                socialHistory: document.getElementById('socialHistory').value,
-                vaccineHistory: document.getElementById('vaccineHistory').value,
-                foodAllergies: document.getElementById('foodAllergies').value,
-                materialAllergies: document.getElementById('materialAllergies').value,
-                medicationAllergies: document.getElementById('medicationAllergies').value,
-                doctorNote: document.getElementById('doctorNote').value,
-            };
-
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push(user);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            // Generate URL with user data
-            const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User Details</title>
-                </head>
-                <body>
-                    <h1>User Details</h1>
-                    <h2>Personal Details</h2>
-                    <p><strong>Name:</strong> ${user.name}</p>
-                    <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
-                    <p><strong>Age:</strong> ${user.age}</p>
-                    <p><strong>Gender:</strong> ${user.gender}</p>
-                    <p><strong>Date of Birth:</strong> ${user.dob}</p>
-                    <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
-                    <p><strong>Insurance ID:</strong> ${user.insuranceId}</p>
-                    <p><strong>Primary Care Physician Name:</strong> ${user.pcpName}</p>
-                    <p><strong>Primary Care Physician Number:</strong> ${user.pcpNumber}</p>
-                    <p><strong>Marital Status:</strong> ${user.maritalStatus}</p>
-                    <p><strong>Medical Proxy Number:</strong> ${user.medicalProxyNumber}</p>
-                    <h2>Insurance Info</h2>
-                    <p><strong>Name of Policy:</strong> ${user.policyName}</p>
-                    <p><strong>Employer:</strong> ${user.employer}</p>
-                    <p><strong>Employer Address:</strong> ${user.employerAddress}</p>
-                    <p><strong>Policy ID:</strong> ${user.policyId}</p>
-                    <h2>Medical History</h2>
-                    <p><strong>Chronic Conditions:</strong> ${user.chronicConditions}</p>
-                    <p><strong>Chronic Medications:</strong> ${user.chronicMedications}</p>
-                    <p><strong>Surgical History:</strong> ${user.surgicalHistory}</p>
-                    <p><strong>Congenital Disease History:</strong> ${user.congenitalDiseaseHistory}</p>
-                    <p><strong>Family History:</strong> ${user.familyHistory}</p>
-                    <p><strong>Social History:</strong> ${user.socialHistory}</p>
-                    <p><strong>Vaccine History:</strong> ${user.vaccineHistory}</p>
-                    <h2>Allergen Information</h2>
-                    <p><strong>Food Allergies:</strong> ${user.foodAllergies}</p>
-                    <p><strong>Material Allergies:</strong> ${user.materialAllergies}</p>
-                    <p><strong>Medication Allergies:</strong> ${user.medicationAllergies}</p>
-                    <h2>Note to Doctor</h2>
-                    <p>${user.doctorNote}</p>
-                </body>
-                </html>
-            `);
-            window.open(url, '_blank');
-        });
-
-        // Delete user
-        function deleteUser(index) {
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            users.splice(index, 1);
-            localStorage.setItem('users', JSON.stringify(users));
-            loadUsers();
-        }
-
-        // Toggle sections
+        // Add user
         document.getElementById('addUserBtn').addEventListener('click', function() {
             document.getElementById('addUserSection').style.display = 'block';
             document.getElementById('deleteUserSection').style.display = 'none';
         });
 
+        // Delete user
         document.getElementById('deleteUserBtn').addEventListener('click', function() {
             document.getElementById('addUserSection').style.display = 'none';
             document.getElementById('deleteUserSection').style.display = 'block';
+            loadUsers();
         });
 
-        // Initial load
-        loadUsers();
+        // Handle form submission
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const emergencyContact = document.getElementById('emergencyContact').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const dob = document.getElementById('dob').value;
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const insuranceId = document.getElementById('insuranceId').value;
+            const pcpName = document.getElementById('pcpName').value;
+            const pcpNumber = document.getElementById('pcpNumber').value;
+            const maritalStatus = document.getElementById('maritalStatus').value;
+            const medicalProxyNumber = document.getElementById('medicalProxyNumber').value;
+            const policyName = document.getElementById('policyName').value;
+            const employer = document.getElementById('employer').value;
+            const employerAddress = document.getElementById('employerAddress').value;
+            const policyId = document.getElementById('policyId').value;
+            const chronicConditions = document.getElementById('chronicConditions').value;
+            const chronicMedications = document.getElementById('chronicMedications').value;
+            const surgicalHistory = document.getElementById('surgicalHistory').value;
+            const congenitalDiseaseHistory = document.getElementById('congenitalDiseaseHistory').value;
+            const familyHistory = document.getElementById('familyHistory').value;
+            const socialHistory = document.getElementById('socialHistory').value;
+            const vaccineHistory = document.getElementById('vaccineHistory').value;
+            const foodAllergies = document.getElementById('foodAllergies').value;
+            const materialAllergies = document.getElementById('materialAllergies').value;
+            const medicationAllergies = document.getElementById('medicationAllergies').value;
+            const doctorNote = document.getElementById('doctorNote').value;
+
+            // Create user object
+            const userData = {
+                name,
+                emergencyContact,
+                age,
+                gender,
+                dob,
+                bloodGroup,
+                insuranceId,
+                pcpName,
+                pcpNumber,
+                maritalStatus,
+                medicalProxyNumber,
+                policyName,
+                employer,
+                employerAddress,
+                policyId,
+                chronicConditions,
+                chronicMedications,
+                surgicalHistory,
+                congenitalDiseaseHistory,
+                familyHistory,
+                socialHistory,
+                vaccineHistory,
+                foodAllergies,
+                materialAllergies,
+                medicationAllergies,
+                doctorNote
+            };
+
+            // Save user to local storage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push(userData);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Export user data as JSON file
+            const jsonBlob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(jsonBlob);
+            window.open(url, '_blank');
+
+            // Reset form
+            document.getElementById('addUserForm').reset();
+        });
+
+        // Delete user function
+        function deleteUser(index) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            users.splice(index, 1);
+            localStorage.setItem('users', JSON.stringify(users));
+            loadUsers();
+        }
     </script>
 </body>
 </html>
