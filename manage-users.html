@@ -278,27 +278,32 @@
             document.getElementById('deleteUserSection').style.display = 'block';
         });
 
-        // Handle form submission
         document.getElementById('addUserForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const formData = {
-                name: document.getElementById('name').value,
-                emergencyContact: document.getElementById('emergencyContact').value,
-                // Add other form fields here
-            };
+    event.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('name').value,
+        emergencyContact: document.getElementById('emergencyContact').value,
+        // Add other form fields here
+    };
 
-            fetch('/add-user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.text())
-            .then(data => alert(data))
-            .catch(error => console.error('Error:', error));
-        });
+    fetch('/add-user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => alert('Success: ' + data))
+    .catch(error => alert('Error: ' + error.message));
+});
+
     </script>
 </body>
 </html>
