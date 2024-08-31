@@ -1,15 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors()); // Enable CORS
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://ditanadig:NXRUDdSNBR1Fp0Jq@cluster0.9lnca.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
-
 
 const userSchema = new mongoose.Schema({
     // Personal Details
@@ -48,9 +49,6 @@ const userSchema = new mongoose.Schema({
     // Doctor Note (Optional)
     doctorNote: { type: String }
 });
-
-const User = mongoose.model('User', userSchema);
-
 
 const User = mongoose.model('User', userSchema);
 
