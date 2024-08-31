@@ -298,7 +298,7 @@
         document.querySelectorAll('.user-list button').forEach(function(button) {
             button.addEventListener('click', function() {
                 const userId = this.parentElement.textContent.match(/ID: (\d+)/)[1];
-                console.log(Deleting user with ID: ${userId});
+                console.log(`Deleting user with ID: ${userId}`);
                 this.parentElement.remove(); // Simulate deletion
             });
         });
