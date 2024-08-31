@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
     <style>
-        /* Add your styles here */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -93,6 +92,9 @@
         .user-list button:hover {
             background: #c82333;
         }
+        .result {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -111,7 +113,6 @@
             <div class="section" id="addUserSection" style="display: none;">
                 <h2>Add Patient History</h2>
                 <form id="addUserForm">
-                    <!-- Form fields here -->
                     <div class="form-group">
                         <h3>Personal Details</h3>
                         <label for="name">Name</label>
@@ -203,17 +204,43 @@
                         <button type="submit">Save and Export</button>
                     </div>
                 </form>
+                <div class="result" id="result"></div>
             </div>
 
             <!-- Delete User Section -->
             <div class="section" id="deleteUserSection" style="display: none;">
                 <h2>Delete User</h2>
-                <ul id="userList" class="user-list"></ul>
+                <ul class="user-list" id="userList">
+                    <!-- Example User List -->
+                </ul>
             </div>
         </div>
     </div>
     <script>
-        // Load Users
+        const token = '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'; // Replace with your token
+
+        const createGistAndSave = async (user) => {
+            const gistContent = JSON.stringify(user, null, 2);
+            const response = await fetch('https://api.github.com/gists', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    description: 'Patient History',
+                    public: true,
+                    files: {
+                        'patient-history.json': {
+                            content: gistContent
+                        }
+                    }
+                })
+            });
+            const data = await response.json();
+            return data.html_url;
+        };
+
         function loadUsers() {
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const userList = document.getElementById('userList');
@@ -229,21 +256,18 @@
             });
         }
 
-        // Add User
         document.getElementById('addUserBtn').addEventListener('click', () => {
             document.getElementById('addUserSection').style.display = 'block';
             document.getElementById('deleteUserSection').style.display = 'none';
         });
 
-        // Delete User
         document.getElementById('deleteUserBtn').addEventListener('click', () => {
             document.getElementById('deleteUserSection').style.display = 'block';
             document.getElementById('addUserSection').style.display = 'none';
             loadUsers();
         });
 
-        // Save User
-        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+        document.getElementById('addUserForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -286,281 +310,14 @@
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
 
-            // Generate HTML for the new user details
-            const userHtml = generateUserHtml(newUser);
-
-            // Create a Blob with the HTML content
-            const blob = new Blob([userHtml], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-
-            // Open the Blob URL in a new tab
-            window.open(url, '_blank');
+            // Create Gist and display URL
+            const gistUrl = await createGistAndSave(newUser);
+            document.getElementById('result').innerHTML = `<p>User information saved and exported. <a href="${gistUrl}" target="_blank">View Gist</a></p>`;
 
             // Clear the form after saving
             document.getElementById('addUserForm').reset();
-            alert('User information saved and exported.');
         });
 
-        // Generate HTML content for the user
-        function generateUserHtml(user) {
-            return `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User Information</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 0;
-                            padding: 0;
-                            background-color: #f4f4f4;
-                        }
-                        .container {
-                            width: 80%;
-                            margin: auto;
-                            padding: 2rem;
-                        }
-                        h1 {
-                            color: #075cdd;
-                        }
-                        .section {
-                            background: #fff;
-                            border-radius: 8px;
-                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                            margin-bottom: 2rem;
-                            padding: 2rem;
-                        }
-                        .section h2 {
-                            margin-top: 0;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h1>Patient Information</h1>
-                        <div class="section">
-                            <h2>Personal Details</h2>
-                            <p><strong>Name:</strong> ${user.name}</p>
-                            <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
-                            <p><strong>Age:</strong> ${user.age}</p>
-                            <p><strong>Gender:</strong> ${user.gender}</p>
-                            <p><strong>Date of Birth:</strong> ${user.dob}</p>
-                            <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
-                            <p><strong>Insurance ID:</strong> ${user.insuranceId}</p>
-                            <p><strong>Primary Care Physician Name:</strong> ${user.pcpName}</p>
-                            <p><strong>Primary Care Physician Number:</strong> ${user.pcpNumber}</p>
-                            <p><strong>Marital Status:</strong> ${user.maritalStatus}</p>
-                            <p><strong>Medical Proxy Number:</strong> ${user.medicalProxyNumber}</p>
-                        </div>
-                        <div class="section">
-                            <h2>Insurance Info</h2>
-                            <p><strong>Name of Policy:</strong> ${user.insuranceInfo.policyName}</p>
-                            <p><strong>Employer:</strong> ${user.insuranceInfo.employer}</p>
-                            <p><strong>Employer Address:</strong> ${user.insuranceInfo.employerAddress}</p>
-                            <p><strong>Policy ID:</strong> ${user.insuranceInfo.policyId}</p>
-                        </div>
-                        <div class="section">
-                            <h2>Medical History</h2>
-                            <p><strong>Chronic Conditions:</strong> ${user.medicalHistory.chronicConditions}</p>
-                            <p><strong>Chronic Medications:</strong> ${user.medicalHistory.chronicMedications}</p>
-                            <p><strong>Surgical History:</strong> ${user.medicalHistory.surgicalHistory}</p>
-                            <p><strong>Congenital Disease History:</strong> ${user.medicalHistory.congenitalDiseaseHistory}</p>
-                            <p><strong>Family History:</strong> ${user.medicalHistory.familyHistory}</p>
-                            <p><strong>Social History:</strong> ${user.medicalHistory.socialHistory}</p>
-                            <p><strong>Vaccine History:</strong> ${user.medicalHistory.vaccineHistory}</p>
-                        </div>
-                        <div class="section">
-                            <h2>Allergen Information</h2>
-                            <p><strong>Food Allergies:</strong> ${user.allergenInformation.foodAllergies}</p>
-                            <p><strong>Material Allergies:</strong> ${user.allergenInformation.materialAllergies}</p>
-                            <p><strong>Medication Allergies:</strong> ${user.allergenInformation.medicationAllergies}</p>
-                        </div>
-                        <div class="section">
-                            <h2>Note to Doctor</h2>
-                            <p>${user.doctorNote}</p>
-                        </div>
-                    </div>
-                    <script>
-    // Your GitHub token
-    const GITHUB_TOKEN = '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';
-
-    // Save User
-    document.getElementById('addUserForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        const newUser = {
-            name: document.getElementById('name').value,
-            emergencyContact: document.getElementById('emergencyContact').value,
-            age: document.getElementById('age').value,
-            gender: document.getElementById('gender').value,
-            dob: document.getElementById('dob').value,
-            bloodGroup: document.getElementById('bloodGroup').value,
-            insuranceId: document.getElementById('insuranceId').value,
-            pcpName: document.getElementById('pcpName').value,
-            pcpNumber: document.getElementById('pcpNumber').value,
-            maritalStatus: document.getElementById('maritalStatus').value,
-            medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
-            insuranceInfo: {
-                policyName: document.getElementById('policyName').value,
-                employer: document.getElementById('employer').value,
-                employerAddress: document.getElementById('employerAddress').value,
-                policyId: document.getElementById('policyId').value
-            },
-            medicalHistory: {
-                chronicConditions: document.getElementById('chronicConditions').value,
-                chronicMedications: document.getElementById('chronicMedications').value,
-                surgicalHistory: document.getElementById('surgicalHistory').value,
-                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
-                familyHistory: document.getElementById('familyHistory').value,
-                socialHistory: document.getElementById('socialHistory').value,
-                vaccineHistory: document.getElementById('vaccineHistory').value
-            },
-            allergenInformation: {
-                foodAllergies: document.getElementById('foodAllergies').value,
-                materialAllergies: document.getElementById('materialAllergies').value,
-                medicationAllergies: document.getElementById('medicationAllergies').value
-            },
-            doctorNote: document.getElementById('doctorNote').value
-        };
-
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-
-        // Generate HTML for the new user details
-        const userHtml = generateUserHtml(newUser);
-
-        // Create a new Gist
-        fetch('https://api.github.com/gists', {
-            method: 'POST',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                description: 'Patient Information',
-                public: true,
-                files: {
-                    'patient-info.html': {
-                        content: userHtml
-                    }
-                }
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.html_url) {
-                window.open(data.html_url, '_blank');
-                alert('User information saved and exported.');
-            } else {
-                alert('Failed to upload to GitHub Gist.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while uploading the data.');
-        });
-
-        // Clear the form after saving
-        document.getElementById('addUserForm').reset();
-    });
-
-    // Generate HTML content for the user
-    function generateUserHtml(user) {
-        return `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>User Information</title>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f4f4f4;
-                    }
-                    .container {
-                        width: 80%;
-                        margin: auto;
-                        padding: 2rem;
-                    }
-                    h1 {
-                        color: #075cdd;
-                    }
-                    .section {
-                        background: #fff;
-                        border-radius: 8px;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                        margin-bottom: 2rem;
-                        padding: 2rem;
-                    }
-                    .section h2 {
-                        margin-top: 0;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <h1>Patient Information</h1>
-                    <div class="section">
-                        <h2>Personal Details</h2>
-                        <p><strong>Name:</strong> ${user.name}</p>
-                        <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
-                        <p><strong>Age:</strong> ${user.age}</p>
-                        <p><strong>Gender:</strong> ${user.gender}</p>
-                        <p><strong>Date of Birth:</strong> ${user.dob}</p>
-                        <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
-                        <p><strong>Insurance ID:</strong> ${user.insuranceId}</p>
-                        <p><strong>Primary Care Physician Name:</strong> ${user.pcpName}</p>
-                        <p><strong>Primary Care Physician Number:</strong> ${user.pcpNumber}</p>
-                        <p><strong>Marital Status:</strong> ${user.maritalStatus}</p>
-                        <p><strong>Medical Proxy Number:</strong> ${user.medicalProxyNumber}</p>
-                    </div>
-                    <div class="section">
-                        <h2>Insurance Info</h2>
-                        <p><strong>Name of Policy:</strong> ${user.insuranceInfo.policyName}</p>
-                        <p><strong>Employer:</strong> ${user.insuranceInfo.employer}</p>
-                        <p><strong>Employer Address:</strong> ${user.insuranceInfo.employerAddress}</p>
-                        <p><strong>Policy ID:</strong> ${user.insuranceInfo.policyId}</p>
-                    </div>
-                    <div class="section">
-                        <h2>Medical History</h2>
-                        <p><strong>Chronic Conditions:</strong> ${user.medicalHistory.chronicConditions}</p>
-                        <p><strong>Chronic Medications:</strong> ${user.medicalHistory.chronicMedications}</p>
-                        <p><strong>Surgical History:</strong> ${user.medicalHistory.surgicalHistory}</p>
-                        <p><strong>Congenital Disease History:</strong> ${user.medicalHistory.congenitalDiseaseHistory}</p>
-                        <p><strong>Family History:</strong> ${user.medicalHistory.familyHistory}</p>
-                        <p><strong>Social History:</strong> ${user.medicalHistory.socialHistory}</p>
-                        <p><strong>Vaccine History:</strong> ${user.medicalHistory.vaccineHistory}</p>
-                    </div>
-                    <div class="section">
-                        <h2>Allergen Information</h2>
-                        <p><strong>Food Allergies:</strong> ${user.allergenInformation.foodAllergies}</p>
-                        <p><strong>Material Allergies:</strong> ${user.allergenInformation.materialAllergies}</p>
-                        <p><strong>Medication Allergies:</strong> ${user.allergenInformation.medicationAllergies}</p>
-                    </div>
-                    <div class="section">
-                        <h2>Note to Doctor</h2>
-                        <p>${user.doctorNote}</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-    }
-</script>
-
-                </body>
-                </html>
-            `;
-        }
-
-        // Delete User
         function deleteUser(index) {
             const users = JSON.parse(localStorage.getItem('users')) || [];
             users.splice(index, 1);
@@ -568,7 +325,6 @@
             loadUsers();
         }
 
-        // Load users on page load
         window.onload = loadUsers;
     </script>
 </body>
