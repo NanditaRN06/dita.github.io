@@ -236,58 +236,39 @@
 
         // Save form data to local storage
         function saveFormData() {
-            const formData = {
-                name: document.getElementById('name').value,
-                emergencyContact: document.getElementById('emergencyContact').value,
-                age: document.getElementById('age').value,
-                gender: document.getElementById('gender').value,
-                dob: document.getElementById('dob').value,
-                bloodGroup: document.getElementById('bloodGroup').value,
-                insuranceId: document.getElementById('insuranceId').value,
-                pcpName: document.getElementById('pcpName').value,
-                pcpNumber: document.getElementById('pcpNumber').value,
-                maritalStatus: document.getElementById('maritalStatus').value,
-                medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
-                policyName: document.getElementById('policyName').value,
-                employer: document.getElementById('employer').value,
-                employerAddress: document.getElementById('employerAddress').value,
-                policyId: document.getElementById('policyId').value,
-                chronicConditions: document.getElementById('chronicConditions').value,
-                chronicMedications: document.getElementById('chronicMedications').value,
-                surgicalHistory: document.getElementById('surgicalHistory').value,
-                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
-                familyHistory: document.getElementById('familyHistory').value,
-                socialHistory: document.getElementById('socialHistory').value,
-                vaccineHistory: document.getElementById('vaccineHistory').value,
-                foodAllergies: document.getElementById('foodAllergies').value,
-                materialAllergies: document.getElementById('materialAllergies').value,
-                medicationAllergies: document.getElementById('medicationAllergies').value,
-                doctorNote: document.getElementById('doctorNote').value
-            };
-            localStorage.setItem('userFormData', JSON.stringify(formData));
-        }
-
-        // Event listeners for showing/hiding sections
-        document.getElementById('addUserBtn').addEventListener('click', function() {
-            document.getElementById('addUserSection').style.display = 'block';
-            document.getElementById('deleteUserSection').style.display = 'none';
-        });
-
-        document.getElementById('deleteUserBtn').addEventListener('click', function() {
-            document.getElementById('addUserSection').style.display = 'none';
-            document.getElementById('deleteUserSection').style.display = 'block';
-        });
-
-        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+document.getElementById('addUserForm').addEventListener('submit', function(event) {
     event.preventDefault();
     
     const formData = {
         name: document.getElementById('name').value,
         emergencyContact: document.getElementById('emergencyContact').value,
-        // Add other form fields here
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        dob: document.getElementById('dob').value,
+        bloodGroup: document.getElementById('bloodGroup').value,
+        insuranceId: document.getElementById('insuranceId').value,
+        pcpName: document.getElementById('pcpName').value,
+        pcpNumber: document.getElementById('pcpNumber').value,
+        maritalStatus: document.getElementById('maritalStatus').value,
+        medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
+        policyName: document.getElementById('policyName').value,
+        employer: document.getElementById('employer').value,
+        employerAddress: document.getElementById('employerAddress').value,
+        policyId: document.getElementById('policyId').value,
+        chronicConditions: document.getElementById('chronicConditions').value,
+        chronicMedications: document.getElementById('chronicMedications').value,
+        surgicalHistory: document.getElementById('surgicalHistory').value,
+        congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
+        familyHistory: document.getElementById('familyHistory').value,
+        socialHistory: document.getElementById('socialHistory').value,
+        vaccineHistory: document.getElementById('vaccineHistory').value,
+        foodAllergies: document.getElementById('foodAllergies').value,
+        materialAllergies: document.getElementById('materialAllergies').value,
+        medicationAllergies: document.getElementById('medicationAllergies').value,
+        doctorNote: document.getElementById('doctorNote').value
     };
 
-    fetch('/add-user', {
+    fetch('/api/add-user', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -303,6 +284,7 @@
     .then(data => alert('Success: ' + data))
     .catch(error => alert('Error: ' + error.message));
 });
+
 
     </script>
 </body>
