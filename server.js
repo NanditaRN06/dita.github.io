@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -52,12 +52,12 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-app.post('/api/add-user', (req, res) => {
+// Endpoint to handle form submission
+app.post('/add-user', (req, res) => {
     const userData = new User(req.body);
     userData.save()
         .then(() => res.status(200).send('User data saved successfully!'))
         .catch(err => res.status(400).send('Error saving user data: ' + err.message));
 });
 
-// Export the serverless function
-module.exports = app;
+app.listen(3000, () => console.log('Server running on port 3000'));
