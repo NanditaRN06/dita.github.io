@@ -198,7 +198,7 @@
                         <textarea id="doctorNote" rows="4"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="submit">Save and Export</button>
+                        <button type="submit">Save and View</button>
                     </div>
                 </form>
             </div>
@@ -213,16 +213,6 @@
         </div>
     </div>
     <script>
-        // Convert user data to a query string format
-        function encodeUserData(data) {
-            return encodeURIComponent(JSON.stringify(data));
-        }
-
-        function createDataUrl(data) {
-            const encodedData = encodeUserData(data);
-            return `data:text/html;charset=utf-8,<html><body><pre>${encodedData}</pre></body></html>`;
-        }
-
         // Load all users from local storage
         function loadUsers() {
             const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -230,35 +220,20 @@
             userList.innerHTML = '';
 
             users.forEach((user, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    ${user.name} - ${user.emergencyContact}
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${user.name}</span>
                     <button onclick="deleteUser(${index})">Delete</button>
                 `;
-                userList.appendChild(li);
+                userList.appendChild(listItem);
             });
         }
 
-        // Add User
-        document.getElementById('addUserBtn').addEventListener('click', () => {
-            document.getElementById('addUserSection').style.display = 'block';
-            document.getElementById('deleteUserSection').style.display = 'none';
-        });
+        // Add user to local storage
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        // Delete User
-        document.getElementById('deleteUserBtn').addEventListener('click', () => {
-            document.getElementById('deleteUserSection').style.display = 'block';
-            document.getElementById('addUserSection').style.display = 'none';
-            loadUsers();
-        });
-
-        // Save User
-        document.getElementById('addUserForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-
-            const newUser = {
+            const user = {
                 name: document.getElementById('name').value,
                 emergencyContact: document.getElementById('emergencyContact').value,
                 age: document.getElementById('age').value,
@@ -270,51 +245,96 @@
                 pcpNumber: document.getElementById('pcpNumber').value,
                 maritalStatus: document.getElementById('maritalStatus').value,
                 medicalProxyNumber: document.getElementById('medicalProxyNumber').value,
-                insuranceInfo: {
-                    policyName: document.getElementById('policyName').value,
-                    employer: document.getElementById('employer').value,
-                    employerAddress: document.getElementById('employerAddress').value,
-                    policyId: document.getElementById('policyId').value
-                },
-                medicalHistory: {
-                    chronicConditions: document.getElementById('chronicConditions').value,
-                    chronicMedications: document.getElementById('chronicMedications').value,
-                    surgicalHistory: document.getElementById('surgicalHistory').value,
-                    congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
-                    familyHistory: document.getElementById('familyHistory').value,
-                    socialHistory: document.getElementById('socialHistory').value,
-                    vaccineHistory: document.getElementById('vaccineHistory').value
-                },
-                allergenInformation: {
-                    foodAllergies: document.getElementById('foodAllergies').value,
-                    materialAllergies: document.getElementById('materialAllergies').value,
-                    medicationAllergies: document.getElementById('medicationAllergies').value
-                },
-                doctorNote: document.getElementById('doctorNote').value
+                policyName: document.getElementById('policyName').value,
+                employer: document.getElementById('employer').value,
+                employerAddress: document.getElementById('employerAddress').value,
+                policyId: document.getElementById('policyId').value,
+                chronicConditions: document.getElementById('chronicConditions').value,
+                chronicMedications: document.getElementById('chronicMedications').value,
+                surgicalHistory: document.getElementById('surgicalHistory').value,
+                congenitalDiseaseHistory: document.getElementById('congenitalDiseaseHistory').value,
+                familyHistory: document.getElementById('familyHistory').value,
+                socialHistory: document.getElementById('socialHistory').value,
+                vaccineHistory: document.getElementById('vaccineHistory').value,
+                foodAllergies: document.getElementById('foodAllergies').value,
+                materialAllergies: document.getElementById('materialAllergies').value,
+                medicationAllergies: document.getElementById('medicationAllergies').value,
+                doctorNote: document.getElementById('doctorNote').value,
             };
 
-            users.push(newUser);
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push(user);
             localStorage.setItem('users', JSON.stringify(users));
 
-            // Clear the form after saving
-            document.getElementById('addUserForm').reset();
-            alert('User information saved and exported.');
-
-            // Generate and display URL
-            const dataUrl = createDataUrl(newUser);
-            window.open(dataUrl, '_blank');
+            // Generate URL with user data
+            const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User Details</title>
+                </head>
+                <body>
+                    <h1>User Details</h1>
+                    <h2>Personal Details</h2>
+                    <p><strong>Name:</strong> ${user.name}</p>
+                    <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
+                    <p><strong>Age:</strong> ${user.age}</p>
+                    <p><strong>Gender:</strong> ${user.gender}</p>
+                    <p><strong>Date of Birth:</strong> ${user.dob}</p>
+                    <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+                    <p><strong>Insurance ID:</strong> ${user.insuranceId}</p>
+                    <p><strong>Primary Care Physician Name:</strong> ${user.pcpName}</p>
+                    <p><strong>Primary Care Physician Number:</strong> ${user.pcpNumber}</p>
+                    <p><strong>Marital Status:</strong> ${user.maritalStatus}</p>
+                    <p><strong>Medical Proxy Number:</strong> ${user.medicalProxyNumber}</p>
+                    <h2>Insurance Info</h2>
+                    <p><strong>Name of Policy:</strong> ${user.policyName}</p>
+                    <p><strong>Employer:</strong> ${user.employer}</p>
+                    <p><strong>Employer Address:</strong> ${user.employerAddress}</p>
+                    <p><strong>Policy ID:</strong> ${user.policyId}</p>
+                    <h2>Medical History</h2>
+                    <p><strong>Chronic Conditions:</strong> ${user.chronicConditions}</p>
+                    <p><strong>Chronic Medications:</strong> ${user.chronicMedications}</p>
+                    <p><strong>Surgical History:</strong> ${user.surgicalHistory}</p>
+                    <p><strong>Congenital Disease History:</strong> ${user.congenitalDiseaseHistory}</p>
+                    <p><strong>Family History:</strong> ${user.familyHistory}</p>
+                    <p><strong>Social History:</strong> ${user.socialHistory}</p>
+                    <p><strong>Vaccine History:</strong> ${user.vaccineHistory}</p>
+                    <h2>Allergen Information</h2>
+                    <p><strong>Food Allergies:</strong> ${user.foodAllergies}</p>
+                    <p><strong>Material Allergies:</strong> ${user.materialAllergies}</p>
+                    <p><strong>Medication Allergies:</strong> ${user.medicationAllergies}</p>
+                    <h2>Note to Doctor</h2>
+                    <p>${user.doctorNote}</p>
+                </body>
+                </html>
+            `);
+            window.open(url, '_blank');
         });
 
-        // Delete User
+        // Delete user
         function deleteUser(index) {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let users = JSON.parse(localStorage.getItem('users')) || [];
             users.splice(index, 1);
             localStorage.setItem('users', JSON.stringify(users));
             loadUsers();
         }
 
-        // Load users on page load
-        window.onload = loadUsers;
+        // Toggle sections
+        document.getElementById('addUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'block';
+            document.getElementById('deleteUserSection').style.display = 'none';
+        });
+
+        document.getElementById('deleteUserBtn').addEventListener('click', function() {
+            document.getElementById('addUserSection').style.display = 'none';
+            document.getElementById('deleteUserSection').style.display = 'block';
+        });
+
+        // Initial load
+        loadUsers();
     </script>
 </body>
 </html>
