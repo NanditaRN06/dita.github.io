@@ -282,29 +282,23 @@
         document.getElementById('addUserForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
-            // Save form data to local storage
-            saveFormData();
+            const formData = {
+                name: document.getElementById('name').value,
+                emergencyContact: document.getElementById('emergencyContact').value,
+                // Add other form fields here
+            };
 
-            // Process form data (e.g., save to a database, export as CSV)
-            const formData = JSON.parse(localStorage.getItem('userFormData'));
-            console.log('Form Data:', formData);
-
-            // Reset form after submission
-            document.getElementById('addUserForm').reset();
-            localStorage.removeItem('userFormData'); // Clear saved data after submission
+            fetch('/add-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
         });
-
-        // Example delete user functionality
-        document.querySelectorAll('.user-list button').forEach(function(button) {
-            button.addEventListener('click', function() {
-                const userId = this.parentElement.textContent.match(/ID: (\d+)/)[1];
-                console.log(`Deleting user with ID: ${userId}`);
-                this.parentElement.remove(); // Simulate deletion
-            });
-        });
-
-        // Load form data on page load
-        window.addEventListener('load', loadFormData);
     </script>
 </body>
 </html>
