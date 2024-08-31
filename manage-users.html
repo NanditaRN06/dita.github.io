@@ -5,7 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Users</title>
     <style>
-        /* Your existing CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #075cdd;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .main-content {
+            padding: 2rem;
+        }
+        .section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            padding: 2rem;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .btn {
+            padding: 0.75rem;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        .form-group button {
+            padding: 0.75rem;
+            background: #3c71e4;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background: #555;
+        }
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+        .user-list li {
+            padding: 0.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .user-list li:last-child {
+            border-bottom: none;
+        }
+        .user-list button {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+        .user-list button:hover {
+            background: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -26,95 +112,90 @@
                 <form id="addUserForm">
                     <div class="form-group">
                         <h3>Personal Details</h3>
-                        <!-- Form Fields -->
                         <label for="name">Name</label>
-                        <input type="text" id="name" required><br>
-
+                        <input type="text" id="name" required>
                         <label for="emergencyContact">Emergency Contact</label>
-                        <input type="text" id="emergencyContact"><br>
-
+                        <input type="text" id="emergencyContact" required>
                         <label for="age">Age</label>
-                        <input type="number" id="age"><br>
-
+                        <input type="number" id="age" required>
                         <label for="gender">Gender</label>
-                        <select id="gender">
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
-                        </select><br>
-
+                        </select>
                         <label for="dob">Date of Birth</label>
-                        <input type="date" id="dob"><br>
-
+                        <input type="date" id="dob" required>
                         <label for="bloodGroup">Blood Group</label>
-                        <input type="text" id="bloodGroup"><br>
-
+                        <select id="bloodGroup" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
                         <label for="insuranceId">Insurance ID</label>
-                        <input type="text" id="insuranceId"><br>
-
+                        <input type="text" id="insuranceId" required>
                         <label for="pcpName">Primary Care Physician Name</label>
-                        <input type="text" id="pcpName"><br>
-
+                        <input type="text" id="pcpName" required>
                         <label for="pcpNumber">Primary Care Physician Number</label>
-                        <input type="text" id="pcpNumber"><br>
-
+                        <input type="text" id="pcpNumber" required>
                         <label for="maritalStatus">Marital Status</label>
-                        <input type="text" id="maritalStatus"><br>
-
+                        <select id="maritalStatus" required>
+                            <option value="">Select Marital Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
                         <label for="medicalProxyNumber">Medical Proxy Number</label>
-                        <input type="text" id="medicalProxyNumber"><br>
+                        <input type="text" id="medicalProxyNumber" required>
                     </div>
                     <div class="form-group">
                         <h3>Insurance Info (Optional)</h3>
                         <label for="policyName">Name of Policy</label>
-                        <input type="text" id="policyName"><br>
-
+                        <input type="text" id="policyName">
                         <label for="employer">Employer</label>
-                        <input type="text" id="employer"><br>
-
+                        <input type="text" id="employer">
                         <label for="employerAddress">Employer Address</label>
-                        <input type="text" id="employerAddress"><br>
-
+                        <input type="text" id="employerAddress">
                         <label for="policyId">Policy ID</label>
-                        <input type="text" id="policyId"><br>
+                        <input type="text" id="policyId">
                     </div>
                     <div class="form-group">
                         <h3>Medical History (Optional)</h3>
                         <label for="chronicConditions">Chronic Conditions</label>
-                        <textarea id="chronicConditions" rows="3"></textarea><br>
-
+                        <textarea id="chronicConditions" rows="3"></textarea>
                         <label for="chronicMedications">Chronic Medications</label>
-                        <textarea id="chronicMedications" rows="3"></textarea><br>
-
+                        <textarea id="chronicMedications" rows="3"></textarea>
                         <label for="surgicalHistory">Surgical History</label>
-                        <textarea id="surgicalHistory" rows="3"></textarea><br>
-
+                        <textarea id="surgicalHistory" rows="3"></textarea>
                         <label for="congenitalDiseaseHistory">Congenital Disease History</label>
-                        <textarea id="congenitalDiseaseHistory" rows="3"></textarea><br>
-
+                        <textarea id="congenitalDiseaseHistory" rows="3"></textarea>
                         <label for="familyHistory">Family History</label>
-                        <textarea id="familyHistory" rows="3"></textarea><br>
-
+                        <textarea id="familyHistory" rows="3"></textarea>
                         <label for="socialHistory">Social History</label>
-                        <textarea id="socialHistory" rows="3"></textarea><br>
-
+                        <textarea id="socialHistory" rows="3"></textarea>
                         <label for="vaccineHistory">Vaccine History</label>
-                        <textarea id="vaccineHistory" rows="3"></textarea><br>
+                        <textarea id="vaccineHistory" rows="3"></textarea>
                     </div>
                     <div class="form-group">
                         <h3>Allergen Information (Optional)</h3>
                         <label for="foodAllergies">Food Allergies</label>
-                        <textarea id="foodAllergies" rows="3"></textarea><br>
-
+                        <textarea id="foodAllergies" rows="2"></textarea>
                         <label for="materialAllergies">Material Allergies</label>
-                        <textarea id="materialAllergies" rows="3"></textarea><br>
-
+                        <textarea id="materialAllergies" rows="2"></textarea>
                         <label for="medicationAllergies">Medication Allergies</label>
-                        <textarea id="medicationAllergies" rows="3"></textarea><br>
+                        <textarea id="medicationAllergies" rows="2"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="doctorNote">Note to Doctor (Optional)</label>
-                        <textarea id="doctorNote" rows="4"></textarea><br>
+                        <textarea id="doctorNote" rows="4"></textarea>
                     </div>
                     <div class="form-group">
                         <button type="submit">Save and Export</button>
@@ -161,11 +242,13 @@
             loadUsers();
         });
 
-        // Save and Export User
+        // Save User
         document.getElementById('addUserForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const user = {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            const newUser = {
                 name: document.getElementById('name').value,
                 emergencyContact: document.getElementById('emergencyContact').value,
                 age: document.getElementById('age').value,
@@ -200,99 +283,108 @@
                 doctorNote: document.getElementById('doctorNote').value
             };
 
-            // Save to local storage
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push(user);
+            users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
 
-            // Generate HTML content for export
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>User Details</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        .container { max-width: 800px; margin: auto; }
-                        .section { margin-bottom: 20px; }
-                        .details p { margin: 5px 0; }
-                        .details label { font-weight: bold; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h1>User Details</h1>
-                        <div class="section">
-                            <h2>Personal Details</h2>
-                            <div class="details">
-                                <p><label>Name:</label> ${user.name}</p>
-                                <p><label>Emergency Contact:</label> ${user.emergencyContact}</p>
-                                <p><label>Age:</label> ${user.age}</p>
-                                <p><label>Gender:</label> ${user.gender}</p>
-                                <p><label>Date of Birth:</label> ${user.dob}</p>
-                                <p><label>Blood Group:</label> ${user.bloodGroup}</p>
-                                <p><label>Insurance ID:</label> ${user.insuranceId}</p>
-                                <p><label>Primary Care Physician Name:</label> ${user.pcpName}</p>
-                                <p><label>Primary Care Physician Number:</label> ${user.pcpNumber}</p>
-                                <p><label>Marital Status:</label> ${user.maritalStatus}</p>
-                                <p><label>Medical Proxy Number:</label> ${user.medicalProxyNumber}</p>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <h2>Insurance Info</h2>
-                            <div class="details">
-                                <p><label>Name of Policy:</label> ${user.insuranceInfo.policyName}</p>
-                                <p><label>Employer:</label> ${user.insuranceInfo.employer}</p>
-                                <p><label>Employer Address:</label> ${user.insuranceInfo.employerAddress}</p>
-                                <p><label>Policy ID:</label> ${user.insuranceInfo.policyId}</p>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <h2>Medical History</h2>
-                            <div class="details">
-                                <p><label>Chronic Conditions:</label> ${user.medicalHistory.chronicConditions}</p>
-                                <p><label>Chronic Medications:</label> ${user.medicalHistory.chronicMedications}</p>
-                                <p><label>Surgical History:</label> ${user.medicalHistory.surgicalHistory}</p>
-                                <p><label>Congenital Disease History:</label> ${user.medicalHistory.congenitalDiseaseHistory}</p>
-                                <p><label>Family History:</label> ${user.medicalHistory.familyHistory}</p>
-                                <p><label>Social History:</label> ${user.medicalHistory.socialHistory}</p>
-                                <p><label>Vaccine History:</label> ${user.medicalHistory.vaccineHistory}</p>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <h2>Allergen Information</h2>
-                            <div class="details">
-                                <p><label>Food Allergies:</label> ${user.allergenInformation.foodAllergies}</p>
-                                <p><label>Material Allergies:</label> ${user.allergenInformation.materialAllergies}</p>
-                                <p><label>Medication Allergies:</label> ${user.allergenInformation.medicationAllergies}</p>
-                            </div>
-                        </div>
-                        <div class="section">
-                            <h2>Doctor's Note</h2>
-                            <div class="details">
-                                <p>${user.doctorNote}</p>
-                            </div>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
+            // Generate HTML for the new user details
+            const userHtml = generateUserHtml(newUser);
 
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-
-            // Create and trigger download link
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'user-details.html';
-            link.click();  // Programmatically click the link to trigger the download
+            // Open new window with the generated HTML
+            const newWindow = window.open('', '_blank');
+            newWindow.document.open();
+            newWindow.document.write(userHtml);
+            newWindow.document.close();
 
             // Clear the form after saving
             document.getElementById('addUserForm').reset();
             alert('User information saved and exported.');
         });
+
+        // Generate HTML content for the user
+        function generateUserHtml(user) {
+            return `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>User Information</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f4f4f4;
+                        }
+                        .container {
+                            width: 80%;
+                            margin: auto;
+                            padding: 2rem;
+                        }
+                        h1 {
+                            color: #075cdd;
+                        }
+                        .section {
+                            background: #fff;
+                            border-radius: 8px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            margin-bottom: 2rem;
+                            padding: 2rem;
+                        }
+                        .section h2 {
+                            margin-top: 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <h1>Patient Information</h1>
+                        <div class="section">
+                            <h2>Personal Details</h2>
+                            <p><strong>Name:</strong> ${user.name}</p>
+                            <p><strong>Emergency Contact:</strong> ${user.emergencyContact}</p>
+                            <p><strong>Age:</strong> ${user.age}</p>
+                            <p><strong>Gender:</strong> ${user.gender}</p>
+                            <p><strong>Date of Birth:</strong> ${user.dob}</p>
+                            <p><strong>Blood Group:</strong> ${user.bloodGroup}</p>
+                            <p><strong>Insurance ID:</strong> ${user.insuranceId}</p>
+                            <p><strong>Primary Care Physician Name:</strong> ${user.pcpName}</p>
+                            <p><strong>Primary Care Physician Number:</strong> ${user.pcpNumber}</p>
+                            <p><strong>Marital Status:</strong> ${user.maritalStatus}</p>
+                            <p><strong>Medical Proxy Number:</strong> ${user.medicalProxyNumber}</p>
+                        </div>
+                        <div class="section">
+                            <h2>Insurance Info</h2>
+                            <p><strong>Name of Policy:</strong> ${user.insuranceInfo.policyName}</p>
+                            <p><strong>Employer:</strong> ${user.insuranceInfo.employer}</p>
+                            <p><strong>Employer Address:</strong> ${user.insuranceInfo.employerAddress}</p>
+                            <p><strong>Policy ID:</strong> ${user.insuranceInfo.policyId}</p>
+                        </div>
+                        <div class="section">
+                            <h2>Medical History</h2>
+                            <p><strong>Chronic Conditions:</strong> ${user.medicalHistory.chronicConditions}</p>
+                            <p><strong>Chronic Medications:</strong> ${user.medicalHistory.chronicMedications}</p>
+                            <p><strong>Surgical History:</strong> ${user.medicalHistory.surgicalHistory}</p>
+                            <p><strong>Congenital Disease History:</strong> ${user.medicalHistory.congenitalDiseaseHistory}</p>
+                            <p><strong>Family History:</strong> ${user.medicalHistory.familyHistory}</p>
+                            <p><strong>Social History:</strong> ${user.medicalHistory.socialHistory}</p>
+                            <p><strong>Vaccine History:</strong> ${user.medicalHistory.vaccineHistory}</p>
+                        </div>
+                        <div class="section">
+                            <h2>Allergen Information</h2>
+                            <p><strong>Food Allergies:</strong> ${user.allergenInformation.foodAllergies}</p>
+                            <p><strong>Material Allergies:</strong> ${user.allergenInformation.materialAllergies}</p>
+                            <p><strong>Medication Allergies:</strong> ${user.allergenInformation.medicationAllergies}</p>
+                        </div>
+                        <div class="section">
+                            <h2>Note to Doctor</h2>
+                            <p>${user.doctorNote}</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
 
         // Delete User
         function deleteUser(index) {
