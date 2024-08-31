@@ -1,54 +1,32 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+
 const app = express();
-const port = 3000;
-
-// File path
-const dataFilePath = path.join(__dirname, 'data.json');
-
-// Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-// Helper functions
-function readData() {
-    if (fs.existsSync(dataFilePath)) {
-        return JSON.parse(fs.readFileSync(dataFilePath));
-    }
-    return [];
-}
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/patientDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-function writeData(data) {
-    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
-}
-
-// Routes
-app.post('/api/users', (req, res) => {
-    try {
-        const data = readData();
-        const newUser = { id: data.length + 1, ...req.body };
-        data.push(newUser);
-        writeData(data);
-        res.status(201).send(newUser);
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
+// Define a schema and model for user data
+const userSchema = new mongoose.Schema({
+    name: String,
+    emergencyContact: String,
+    age: Number,
+    gender: String,
+    dob: Date,
+    bloodGroup: String,
+    // Add all other fields here
 });
 
-app.delete('/api/users/:id', (req, res) => {
-    try {
-        let data = readData();
-        data = data.filter(user => user.id !== parseInt(req.params.id));
-        writeData(data);
-        res.status(200).send();
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
+const User = mongoose.model('User', userSchema);
+
+// Endpoint to handle form submission
+app.post('/add-user', (req, res) => {
+    const userData = new User(req.body);
+    userData.save()
+        .then(() => res.status(200).send('User data saved successfully!'))
+        .catch(err => res.status(400).send('Error saving user data: ' + err));
 });
 
-// Start server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
